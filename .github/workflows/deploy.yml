@@ -31,13 +31,13 @@ jobs:
       run: |
         docker buildx build \
           --platform linux/amd64 \
-          -t ${{ secrets.DOCKER_USERNAME }}/spring-boot-ci-demo:latest \
+          -t ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-ci-demo:latest \
           --load .
       
     - name: Push Image to Docker Hub
       run: |
         docker push \
-        ${{ secrets.DOCKER_USERNAME }}/spring-boot-ci-demo:latest
+        ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-ci-demo:latest
 
     - name: SSH and Delploy to EC2
       uses: appleboy/ssh-action@v1
@@ -48,5 +48,5 @@ jobs:
         script: |
           docker stop spring-demo || true
           delete rm spring-demo || true
-          docker pull ${{ secrets.DOCKER_USERNAME }}/spring-boot-ci-demo:latest
-          docker run -d --name spring-demo -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/spring-boot-ci-demo:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-ci-demo:latest
+          docker run -d --name spring-demo -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-ci-demo:latest
